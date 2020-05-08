@@ -1,0 +1,48 @@
+name: highlighterpdf
+title: HighlighterPdf
+version: 1.0.2
+summary: Highiight the text in a Pdf.
+description:
+        HighlighterPdf  is a free and open source software application that you can use to 
+        highlight text in your pdf document. You can select text in a colour of your choice        
+        and then save it.
+confinement: devmode
+
+base: core18
+
+
+
+apps:
+ highlighterpdf:
+   extensions: [gnome-3-28]
+   command: highlighterpdf.sh 
+   environment:
+         JAVA_HOME: $SNAP/usr/lib/jvm/java-11-openjdk-amd64
+         PATH: $JAVA_HOME/bin:$PATH
+   plugs:
+      - home
+      - network
+      - cups-control
+   
+parts:
+  highlighterpdf:
+       source: https://github.com/gerry136/highlighterpdf.git
+       plugin: dump
+       
+       stage-packages:
+           - unzip
+           - openjdk-11-jdk
+ 
+         
+
+
+
+
+
+
+
+
+
+
+
+
