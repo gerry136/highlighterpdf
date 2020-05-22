@@ -3,4 +3,4 @@
 
 
 
-java -jar highlighterpdf.jar
+java -jar $SNAP/highlighterpdf.jar
