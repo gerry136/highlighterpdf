@@ -3,45 +3,67 @@ title: HighlighterPdf
 version: 1.0.2
 summary: Highiight the text in a Pdf.
 description:
-        HighlighterPdf  is a free and open source software application that you can use to 
-        highlight text in your pdf document. You can select text in a colour of your choice        
-        and then save it.
-confinement: classic
-grade: stable
-
+  HighlighterPdf  is a free and open source software application that you can use to 
+  highlight text in your pdf document. You can select text in a colour of your choice        
+  and then save it.
+confinement: strict
+grade: stable  
 base: core18
 
+plugs:
+  gtk-2-engines:
+    interface: content
+    target: $SNAP/lib/gtk-2.0
+    default-provider: gtk2-common-themes
+  gtk-3-themes:
+    default-provider: gtk-common-themes:gtk-3-themes
+    interface: content
+    target: $SNAP/data-dir/themes
+  sound-themes:
+    default-provider: gtk-common-themes:sound-themes
+    interface: content
+    target: $SNAP/data-dir/sounds
+  gnome-3-28-1804:
+    default-provider: gnome-3-28-1804:gnome-3-28-1804
+    interface: content
+    target: $SNAP/gnome-platform
+  icon-themes:
+    default-provider: gtk-common-themes:icon-themes
+    interface: content
+    target: $SNAP/data-dir/icons
 
+layout:
+  /usr/bin/lpr:
+    bind-file: $SNAP/usr/bin/lpr
 
 apps:
- highlighterpdf:
-   extensions: [gnome-3-28]
-   command: java -jar $SNAP/highlighterpdf.jar
-   environment:
-         JAVA_HOME: $SNAP/usr/lib/jvm/java-11-openjdk-amd64
-         PATH: $JAVA_HOME/bin:$PATH
-   plugs:
+  highlighterpdf:
+    extensions: [gnome-3-28]
+    command: desktop-launch launcher
+    environment:
+      JAVA_HOME: $SNAP/usr/lib/jvm/java-11-openjdk-amd64
+      PATH: $JAVA_HOME/bin:$PATH
+    plugs:
+      - avahi-control
       - home
       - network
+      - network-bind
       - cups-control
-      
-   
+
 parts:
   highlighterpdf:
-       source: https://github.com/gerry136/highlighterpdf.git
-       plugin: dump
-
-       build-packages:
-           - openjdk-11-jdk
-           
-       
-       stage-packages:
-           - unzip
-           - openjdk-11-jdk
-           - lpr
- 
-         
-
+    source: https://github.com/gerry136/highlighterpdf.git
+    plugin: dump
+    stage-packages:
+      - cups-bsd # for /usr/bin/lpr
+      - unzip
+      - openjdk-11-jdk
+      - x11-xserver-utils # for xrdb
+  launcher:
+    source: .
+    plugin: dump
+    organize:
+      launcher: bin/launcher
 
 
 
